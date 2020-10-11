@@ -1,160 +1,250 @@
 <template>
-   <div class="page-content">
-         <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
-          <div>
-            <h4 class="mb-3 mb-md-0">Research Archive</h4>
-          </div>
-        </div>   
-
+    <div class="page-content">
+        <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+            <div>
+                <h4 class="mb-3 mb-md-0">Research Archive</h4>
+            </div>
+        </div>
         <div class="row">
-                    <div class="col-md-12 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ title }}</div>
-                
-                                <hr>
-                                <a-button v-if="visibleTable" icon="box" type="dashed" @click="show">
-                                   
-                                  Create New
-                                </a-button>
-                                <a-button v-if="!visibleTable" type="danger" @click="hide">
-                                  Cancel
-                                </a-button>
-                                <transition name="slide-fade"> 
-                                 <div v-if="!visibleTable" class="table-responsive pt-3">
-                                     <form @submit.prevent="createUser">
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input v-model="form.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
-                        <has-error :form="form" field="name"></has-error>
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input v-model="form.email" type="email" name="email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
-                        <has-error :form="form" field="email"></has-error>
-                    </div>
-                    <div class="form-group">
-                        <label>User Role</label>
-                        <input v-model="form.type" type="text" name="text" class="form-control" value="1" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input v-model="form.password" type="text" name="password" class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
-                        <has-error :form="form" field="password"></has-error>
-                    </div>
-                    <button :disabled="form.busy" type="submit" class="btn btn-primary">Create</button>
-                </form>
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <a-tabs default-active-key="1" @change="callback">
+                            <a-tab-pane key="1">
+                                <span slot="tab">
+                                    <a-icon type="ordered-list" />
+                                    List of Researches
+                                </span>
+                                <div class="table-responsive pt-3">
+                                    <a-table :columns="columns" :data-source="researches" @change="handleChange" :pagination="{ pageSize: 10}" :scroll="{ x:700, y: 500 }">
+                                        <a slot="action" slot-scope="text, record">
+                                            <a-dropdown>
+                                                <a-menu slot="overlay">
+                                                    <a-menu-item key="1">
+                                                        <a-icon type="check" />Approve
+                                                    </a-menu-item>
+                                                    <a-menu-item key="2">
+                                                        <a-icon type="close" />Disapprove
+                                                    </a-menu-item>
+                                                    <a-menu-item key="3" @click="showModal(record)">
+                                                        <a-icon type="user" />Edit </a-menu-item>
+                                                    <a-menu-item key="4" @click="deleteUser(record.id)">
+                                                        <a-icon type="user-delete" />Delete</a-menu-item>
+                                                </a-menu>
+                                                <a-button type="dashed" style="margin-left: 8px">
+                                                    <a-icon type="setting" /> More Actions
+                                                    <a-icon type="down" />
+                                                </a-button>
+                                            </a-dropdown>
+                                        </a>
+                                    </a-table>
+                                    <br>
+                                    <div class="d-flex justify-content-center">
+                                        <a-spin :spinning="spinning" :visible="spinningVisible">
+                                            <a-icon slot="indicator" type="loading" style="font-size: 24px" spin />
+                                        </a-spin>
+                                    </div>
                                 </div>
-                            </transition>
-                                <transition name="slide-fade">
-                                <div v-if="visibleTable" class="table-responsive pt-3">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>
-                                                    Research Title
-                                                </th>
-                                                <th>
-                                                    Year Published
-                                                </th>
-                                                <th>
-                                                    Action
-                                                </th>
-                                            
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>CCERMS: A multiplatform</td>
-                                                <td>2020</td>
-                                                <td>Show</td>
-                                            </tr>
-                                            <tr>
-                                                <td>CCERMS: A multiplatform</td>
-                                                <td>2020</td>
-                                                <td>Show</td>
-                                            </tr>
-                                            <tr>
-                                                <td>CCERMS: A multiplatform</td>
-                                                <td>2020</td>
-                                                <td>Show</td>
-                                            </tr>
-                                            <tr>
-                                                <td>CCERMS: A multiplatform</td>
-                                                <td>2020</td>
-                                                <td>Show</td>
-                                            </tr>
-                                            <tr>
-                                                <td>CCERMS: A multiplatform</td>
-                                                <td>2020</td>
-                                                <td>Show</td>
-                                            </tr>
-                                            <tr>
-                                                <td>CCERMS: A multiplatform</td>
-                                                <td>2020</td>
-                                                <td>Show</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <a-pagination
-      show-size-changer
-      :default-current="3"
-      :total="500"
-      @showSizeChange="onShowSizeChange"
-    />
-    <br />
-  
+                            </a-tab-pane>
+                            <a-tab-pane key="2">
+                                <span slot="tab">
+                                    <a-icon type="plus-square" />
+                                    Add New Research
+                                </span>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-4 form-group">
+                                            <label>Research Title</label>
+                                            <input v-model="research.title" type="text" name="title" class="form-control">
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Adviser</label>
+                                            <input v-model="research.adviser" type="text" name="adviser" class="form-control">
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label>Year Published</label>
+                                            <a-select default-value="2020" style="width: 230px" @change="handleChange" v-model="research.year">
+                                                <a-select-option value="2020">
+                                                    2020
+                                                </a-select-option>
+                                                <a-select-option value="2019">
+                                                    2019
+                                                </a-select-option>
+                                                <a-select-option value="2018">
+                                                    2018
+                                                </a-select-option>
+                                            </a-select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 form-group">
+                                            <label>Author(s)</label>
+                                            <a-input v-model="research.authors" type="text" class="form-control">
+                                                <a-tooltip slot="suffix" title="Please use comma to separate author(s)
+                                                Example: Juan Dela Cruz, Thor Magtanggol">
+                                                    <a-icon type="info-circle" style="color: rgba(0,0,0,.45)" />
+                                                </a-tooltip>
+                                            </a-input>
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label>Upload a PDF File</label>
+                                            <div class="clearfix">
+                                                <a-upload :file-list="fileList" :remove=" handleRemove" :before-upload="beforeUpload" accept=".pdf">
+                                                    <a-button :disabled="file">
+                                                        <a-icon type="upload" /> Select a PDF File </a-button>
+                                                </a-upload>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <button type="submit" class="btn btn-primary" @click="createArchive">Create</button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </transition>
-                            </div>
-                        </div>
+                            </a-tab-pane>
+                        </a-tabs>
                     </div>
-                </div>   
+                </div>
+            </div>
+        </div>
     </div>
 </template>
-<style>
-.slide-fade-enter-active {
-  transition: all .3s ease;
-}
-.slide-fade-leave-active {
-  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateX(10px);
-  opacity: 0;
-}
 </style>
 <script>
-import Form from 'vform';
 export default {
     data() {
         return {
-           form: new Form({
-                name: '',
-                email: '',
-                password: '',
-                type: 'Student',
-                role: 2
-            }),
-          visibleTable: true,
-          title : 'Research List',
+            filteredInfo: null,
+            sortedInfo: null,
+            researches: [],
+            singleFile: true,
+            fileList: [],
+            uploading: false,
+            file: false,
+            authors: {},
+            research: {
+                title: '',
+                adviser: '',
+                authors: '',
+                file: '',
+                fileName: '',
+                year: ''
+            },
+            visibleTable: true,
+            spinning: true,
+            spinningVisible: true
         }
-       
+
+    },
+    beforeMount() {
+        this.showAllResearches();
+    },
+    computed: {
+        columns() {
+            let { sortedInfo, filteredInfo } = this;
+            sortedInfo = sortedInfo || {};
+            filteredInfo = filteredInfo || {};
+            const columns = [{
+
+                    title: 'Research Title',
+                    dataIndex: 'title',
+                    ellipsis: true,
+                    width: 200,
+                },
+                {
+                    title: 'Author(s)',
+                    dataIndex: 'author',
+                    key: 'author',
+                },
+                {
+                    title: 'Adviser',
+                    dataIndex: 'adviser',
+                    key: 'adviser',
+                },
+                {
+                    title: 'Year Published',
+                    dataIndex: 'year',
+                    key: 'year',
+                    sorter: (a, b) => a.year - b.year,
+                    sortOrder: sortedInfo.columnKey === 'year' && sortedInfo.order,
+                },
+                {
+                    title: 'Action',
+                    key: 'action',
+                    scopedSlots: {
+                        customRender: 'action',
+                    },
+                },
+            ];
+            return columns;
+        }
     },
     methods: {
-         createUser() {
-            this.form.post('/api/user')
-            toast.fire({
-                icon: 'success',
-                title: 'User created successfully'
-            })
-            this.clear()
+        handleRemove(file) {
+            const index = this.fileList.indexOf(file);
+            const newFileList = this.fileList.slice();
+            newFileList.splice(index, 1);
+            this.fileList = newFileList;
+            this.file = false;
+        },
+        callback(val) {
+            console.log(val);
+        },
+        handleChange(e) {
+            console.log('Val', e);
+        },
+        beforeUpload(file) {
+            this.file = true;
+            this.fileList = [...this.fileList, file];
+            let fileT = this.fileList[0];
+            let fileName = this.fileList[0].name;
+            let reader = new FileReader();
+            var ext = fileName.split('.').pop();
+            if (ext !== 'pdf') {
+                this.fileList.pop();
+                this.file = false;
+
+                this.$message.warning('Please choose a PDF file', 2);
+            } else {
+                this.research.file = fileT;
+                reader.readAsDataURL(file);
+                this.research.fileName = fileName;
+            }
+            return false;
+        },
+        createArchive() {
+            let config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+            let formData = new FormData();
+
+            formData.append('title', this.research.title);
+            formData.append('authors', this.research.authors);
+            formData.append('year', this.research.year);
+            formData.append('file', this.research.file);
+            formData.append('fileName', this.research.fileName);
+            formData.append('adviser', this.research.adviser);
+            axios.post('/api/archive', formData, config).then((res) => {
+                this.$message.success('Success', 2);
+                this.clear();
+            }).catch(err => {
+                this.$message.error('Something wrong try again.', 2);
+            });
         },
         clear() {
-            this.form.name = ''
-            this.form.email = ''
-            this.form.password = ''
+            this.research.title = '';
+            this.research.authors = '';
+            this.research.year = '';
+            this.research.file = '';
+            this.research.fileName = '';
+            this.research.adviser = '';
+            this.fileList = null;
+            this.file = false;
         },
         show() {
             this.visibleTable = false;
@@ -163,8 +253,16 @@ export default {
         hide() {
             this.visibleTable = true;
             this.title = 'Research List';
+        },
+        showAllResearches() {
+            axios.get('/api/archive').then(({ data }) => {
+                this.researches = data.data;
+                console.log(this.researches);
+                this.spinning = false
+                this.spinningVisible = false
+            });
         }
     }
 }
-</script>
 
+</script>

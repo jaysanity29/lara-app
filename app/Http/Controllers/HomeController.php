@@ -23,6 +23,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return redirect()->guest('/admin/dashboard');
+        return redirect()->guest('/admin/dashboard')->with('success', 'You are successfully logged in');
     }
 }

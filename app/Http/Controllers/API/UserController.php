@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 class UserController extends Controller
 {
     /**
@@ -15,7 +16,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::latest()->paginate(10);
+        $users = DB::table('users')->where('type' , '2')->get();
+        return  ['users' => $users];
     }
 
     /**
@@ -26,10 +28,15 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+          $this->validate($request, [
+            'name' => 'required|string|max:191',
+            'email' => 'required|string|email|max:191|unique:users,email,id',
+            'password' => 'sometimes|min:6'
+        ]);
         return User::create([
             'name' => $request['name'],
             'email' => $request['email'],
-            'type' => $request['type'],
+            'type' => $request['role'],
             'password' => Hash::make($request['password'])
         ]);
     }
@@ -54,7 +61,16 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $this->validate($request, [
+            'name' => 'required|string|max:191',
+            'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
+            'password' => 'sometimes|min:6'
+        ]);
+
+        $user->update($request->all());
+        return ['message' => 'Updated the user info.'];
     }
 
     /**
@@ -68,5 +84,31 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
         return ['message' => 'User Deleted'];
+    }
+
+    public function students()
+    {
+        return User::latest()->where('type', '2')->get();   
+    }
+
+    public function getPersonnels() {
+        return User::latest()->where('type', '3')->get();
+    }
+
+    public function storePersonnels(Request $request) {
+
+        $this->validate($request, [
+            'name' => 'required|string|max:191',
+            'email' => 'required|string|email|max:191|unique:users,email,id',
+            'password' => 'sometimes|min:6'
+        ]);
+        $user = User::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'expertises' => $request['exp'],
+            'type' => $request['role'],
+            'password' => Hash::make($request['password'])
+        ]);
+        return ['message' => 'User Created'];
     }
 }

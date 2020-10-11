@@ -2,7 +2,7 @@
  <nav class="sidebar">
       <div class="sidebar-header">
         <router-link to="/student/dashboard" class="sidebar-brand">
-          Student<span></span>
+          <span>Student</span>
         </router-link>
         <div class="sidebar-toggler not-active">
           <span></span>

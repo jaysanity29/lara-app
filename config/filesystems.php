@@ -47,14 +47,16 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'),
         ],
-
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
-
+        'links' => [
+            public_path('storage') => storage_path('app/public'),
+            public_path('images') => storage_path('app/images'),
+        ],        
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

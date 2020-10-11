@@ -26,8 +26,12 @@
         "ant-design-vue": "^1.6.5",
         "axios": "^0.19.2",
         "moment": "^2.27.0",
+        "nprogress": "^0.2.0",
         "sweetalert2": "^9.17.1",
         "vform": "^1.0.1",
+        "vue-nprogress": "^0.2.0",
+        "vue-page-transition": "^0.2.2",
+        "vue-progressbar": "^0.7.5",
         "vue-router": "^3.4.1",
         "vuex": "^3.5.1"
     }

@@ -11,98 +11,89 @@
     <link rel="stylesheet" href="{{ asset('../assets/vendors/core/core.css') }}">
     <!-- endinject -->
   <!-- plugin css for this page -->
-  <link rel="stylesheet" href="{{ asset('../assets/vendors/fullcalendar/fullcalendar.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css') }}">
+ 
     <!-- end plugin css for this page -->
     <!-- inject:css -->
-    <link rel="stylesheet" href="{{ asset('../assets/fonts/feather-font/css/iconfont.css') }}">
-    <link rel="stylesheet" href="{{ asset('../assets/vendors/flag-icon-css/css/flag-icon.min.css') }}">
+   <!--  <link rel="stylesheet" href="{{ asset('../assets/fonts/feather-font/css/iconfont.css') }}">
+    -->
     <!-- endinject -->
   <!-- Layout styles -->  
     <link rel="stylesheet" href="{{ asset('../assets/css/demo_1/style.css') }}">
   <!-- End layout styles -->
   <link rel="shortcut icon" href="{{ asset('../assets/images/favicon.png') }}" />
-  
+
+  </style>
 </head>
 <body>
-    <div id="app" class="main-wrapper">
+  
+    <div id="app" class="main-wrapper">        
         <side-bar></side-bar>
         <header></header>
         <div class="page-wrapper">
-            <nav class="navbar">
+            <nav class="navbar" style="background-color: #0f3057">
                 <a href="#" class="sidebar-toggler">
                     <i data-feather="menu"></i>
                 </a>
-                <div class="navbar-content">
-                
+
+                <div class="navbar-content" >     
+
                     <ul class="navbar-nav">
-                        <li class="nav-item dropdown nav-profile">
-                            <a class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="{{ asset('../assets/images/faces/face1.jpg') }}" alt="profile">
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="profileDropdown">
-                                <div class="dropdown-header d-flex flex-column align-items-center">
-                                    <div class="figure mb-3">
-                                        <img src="{{ asset('../assets/images/faces/face1.jpg') }}" alt="">
-                                    </div>
-                                    <div class="info text-center">
-                                        <p class="name font-weight-bold mb-0">{{ Auth::user()->name }}</p>
-                                        <p class="email text-muted mb-3">{{ Auth::user()->email }}</p>
-                                    </div>
-                                </div>
-                                <div class="dropdown-body">
-                                    <ul class="profile-nav p-0 pt-3">
-                                        <li class="nav-item">
-                                            <a href="#" class="nav-link">
-                                                <i data-feather="user"></i>
-                                                <span>Profile</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#" class="nav-link">
-                                                <i data-feather="edit"></i>
-                                                <span>Edit Profile</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a  class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();
+                        <li class="nav-item dropdown nav-profile">                                
+                        <a-dropdown>
+                        <a class="ant-dropdown-link" aria-haspopup="true" aria-expanded="false">
+                          
+                          <avatar username="{{Auth::user()->name}}" src="" :size="45"  :size="100"
+  :rounded="true"
+  color="#fff"></avatar>
+                        </a>
+                        <a-menu slot="overlay" style="width: 120px">
+
+                        
+                          <a-menu-item>
+                              {{ Auth::user()->name }}    
+                          </a-menu-item>
+
+                          <a-menu-item key="0">
+                            
+                            <router-link to="/admin/profile">
+                             My Profile
+                            </router-link>
+                            
+                          </a-menu-item>
+                          <a-menu-item key="1">
+                             <a  class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                                 <i data-feather="log-out"></i>
                                                 <span>Log Out</span>
+
                                             </a>
-                                        </li>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+
+
+                          </a-menu-item>
+                        </a-menu>
+                      </a-dropdown>
+
+                  </li>
+
+                    </ul>
+                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
                 </div>
             </nav>
             <!-- router-view -->
-            <transition name="slide-fade">
-                 <router-view></router-view>  
-                 </transition>         
+            <vue-page-transition name="fade-in-right">
+                <router-view/>
+            </vue-page-transition>   
             </div>
 
         </div>
-         
+        
     </div>
- 
-     
 </body>
     <script src="{{ asset('../assets/vendors/core/core.js') }}"></script>
-  
-  <script src="{{ asset('../assets/vendors/datatables.net/jquery.dataTables.js') }}"></script>
-  <script src="{{ asset('../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js') }}"></script>
   <script src="{{ asset('js/app.js')}}"></script>
-  <script src="{{ asset('../assets/vendors/jquery.flot/jquery.flot.js') }}"></script>
-  <script src="{{ asset('../assets/vendors/jquery.flot/jquery.flot.resize.js') }}"></script>
-  <script src="{{ asset('../assets/vendors/progressbar.js/progressbar.min.js') }}"></script>
   <script src="{{ asset('../assets/vendors/feather-icons/feather.min.js') }}"></script>
   <script src="{{ asset('../assets/js/template.js') }}"></script>
-<script src="{{ asset('../assets/js/data-table.js') }}"></script>
 
 </html>    

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
+use App\Http\Flash;
+
 class LoginController extends Controller
 {
     /*
@@ -28,10 +30,17 @@ class LoginController extends Controller
     // protected $redirectTo = '/admin/dashboard';
     protected function redirectTo() {
         if(Auth::user()->type == 1) {
+        session()->flash('message', 'This is a flash message containing feedback to the user!'); 
             return 'admin/dashboard';
         }
         else if (Auth::user()->type == 2) {
             return 'student/dashboard';
+        }
+        else if (Auth::user()->type == 3) {
+            return 'adviser/dashboard';
+        }
+        else if (Auth::user()->type == 4) {
+            return 'panel/dashboard';
         }
     }
     /**

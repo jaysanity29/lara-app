@@ -1,146 +1,165 @@
 <template>
-    <div class="container">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+    <div class="page-content">
+        <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+            <div>
+                <h4 class="mb-3 mb-md-0">Manage Subject Teacher</h4>
             </div>
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title">Data Table</h6>
-                    <p class="card-description">Read the <a href="https://datatables.net/" target="_blank"> Official DataTables Documentation </a>for a full list of instructions and other options.</p>
-                    <div class="table-responsive">
-                        <div id="dataTableExample_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-6">
-                                    <div class="dataTables_length" id="dataTableExample_length"><label>Show <select name="dataTableExample_length" aria-controls="dataTableExample" class="custom-select custom-select-sm form-control">
-                                                <option value="10">10</option>
-                                                <option value="30">30</option>
-                                                <option value="50">50</option>
-                                                <option value="-1">All</option>
-                                            </select> entries</label></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <a-tabs default-active-key="1" @change="callback">
+                            <a-tab-pane key="1">
+                                <span slot="tab">
+                                    <a-icon type="ordered-list" />
+                                    List of Subject Teacher
+                                </span>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <a-dropdown-button>
+                                            Sort by Status
+                                            <a-menu slot="overlay" @click="handleMenuClick">
+                                                <a-menu-item key="1">
+                                                    <a-icon type="check" />Approved
+                                                </a-menu-item>
+                                                <a-menu-item key="3">
+                                                    <a-icon type="close" />Disapproved
+                                                </a-menu-item>
+                                            </a-menu>
+                                        </a-dropdown-button>
+                                    </div>
+                                    <div class="col-md-3 ml-auto">
+                                        <a-input-search placeholder="Search user" style="width: 200px" @search="onSearch" />
+                                        <br /><br />
+                                    </div>
                                 </div>
-                                <div class="col-sm-12 col-md-6">
-                                    <div id="dataTableExample_filter" class="dataTables_filter"><label><input type="search" class="form-control" placeholder="Search" aria-controls="dataTableExample"></label></div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <table id="dataTableExample" class="table dataTable no-footer" role="grid" aria-describedby="dataTableExample_info">
+                                <div class="table-responsive pt-3">
+                                    <table class="table table-bordered">
                                         <thead>
-                                            <tr role="row">
-                                                <th class="sorting_asc" tabindex="0" aria-controls="dataTableExample" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 136.333px;">Name</th>
-                                                <th class="sorting" tabindex="0" aria-controls="dataTableExample" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 219.667px;">Position</th>
-                                                <th class="sorting" tabindex="0" aria-controls="dataTableExample" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 95.6667px;">Office</th>
-                                                <th class="sorting" tabindex="0" aria-controls="dataTableExample" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: 37.6667px;">Age</th>
-                                                <th class="sorting" tabindex="0" aria-controls="dataTableExample" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 93.6667px;">Start date</th>
-                                                <th class="sorting" tabindex="0" aria-controls="dataTableExample" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 70.3333px;">Salary</th>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Specialization</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr role="row" class="odd">
-                                                <td class="sorting_1">Airi Satou</td>
-                                                <td>Accountant</td>
-                                                <td>Tokyo</td>
-                                                <td>33</td>
-                                                <td>2008/11/28</td>
-                                                <td>$162,700</td>
-                                            </tr>
-                                            <tr role="row" class="even">
-                                                <td class="sorting_1">Ashton Cox</td>
-                                                <td>Junior Technical Author</td>
-                                                <td>San Francisco</td>
-                                                <td>66</td>
-                                                <td>2009/01/12</td>
-                                                <td>$86,000</td>
-                                            </tr>
-                                            <tr role="row" class="odd">
-                                                <td class="sorting_1">Bradley Greer</td>
-                                                <td>Software Engineer</td>
-                                                <td>London</td>
-                                                <td>41</td>
-                                                <td>2012/10/13</td>
-                                                <td>$132,000</td>
-                                            </tr>
-                                            <tr role="row" class="even">
-                                                <td class="sorting_1">Brielle Williamson</td>
-                                                <td>Integration Specialist</td>
-                                                <td>New York</td>
-                                                <td>61</td>
-                                                <td>2012/12/02</td>
-                                                <td>$372,000</td>
-                                            </tr>
-                                            <tr role="row" class="odd">
-                                                <td class="sorting_1">Cedric Kelly</td>
-                                                <td>Senior Javascript Developer</td>
-                                                <td>Edinburgh</td>
-                                                <td>22</td>
-                                                <td>2012/03/29</td>
-                                                <td>$433,060</td>
-                                            </tr>
-                                            <tr role="row" class="even">
-                                                <td class="sorting_1">Charde Marshall</td>
-                                                <td>Regional Director</td>
-                                                <td>San Francisco</td>
-                                                <td>36</td>
-                                                <td>2008/10/16</td>
-                                                <td>$470,600</td>
-                                            </tr>
-                                            <tr role="row" class="odd">
-                                                <td class="sorting_1">Colleen Hurst</td>
-                                                <td>Javascript Developer</td>
-                                                <td>San Francisco</td>
-                                                <td>39</td>
-                                                <td>2009/09/15</td>
-                                                <td>$205,500</td>
-                                            </tr>
-                                            <tr role="row" class="even">
-                                                <td class="sorting_1">Dai Rios</td>
-                                                <td>Personnel Lead</td>
-                                                <td>Edinburgh</td>
-                                                <td>35</td>
-                                                <td>2012/09/26</td>
-                                                <td>$217,500</td>
-                                            </tr>
-                                            <tr role="row" class="odd">
-                                                <td class="sorting_1">Garrett Winters</td>
-                                                <td>Accountant</td>
-                                                <td>Tokyo</td>
-                                                <td>63</td>
-                                                <td>2011/07/25</td>
-                                                <td>$170,750</td>
-                                            </tr>
-                                            <tr role="row" class="even">
-                                                <td class="sorting_1">Gloria Little</td>
-                                                <td>Systems Administrator</td>
-                                                <td>New York</td>
-                                                <td>59</td>
-                                                <td>2009/04/10</td>
-                                                <td>$237,500</td>
+                                            <tr>
+                                                <td>Ryan Pilapil</td>
+                                                <td>rpilapil@umindanao.edu.ph</td>
+                                                <td>System Analysist and Design</td>
+                                                <td>
+                                                    <a-tag color="green"> Approved </a-tag>
+                                                </td>
+                                                <td>
+                                                    <a-dropdown>
+                                                        <a-menu slot="overlay">
+                                                            <a-menu-item key="1" @click="showModal(user)">
+                                                                <a-icon type="user" />Edit </a-menu-item>
+                                                            <a-menu-item key="2" @click="deleteUser(user.id)">
+                                                                <a-icon type="user-delete" />Delete</a-menu-item>
+                                                        </a-menu>
+                                                        <a-button type="dashed" style="margin-left: 8px">
+                                                            <a-icon type="setting" /> Actions
+                                                            <a-icon type="down" />
+                                                        </a-button>
+                                                    </a-dropdown>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-5">
-                                    <div class="dataTables_info" id="dataTableExample_info" role="status" aria-live="polite">Showing 1 to 10 of 22 entries</div>
+                            </a-tab-pane>
+                            <a-tab-pane key="2">
+                                <span slot="tab">
+                                    <a-icon type="plus-square" />
+                                    Create Account
+                                </span>
+                                <div class="col-md-12">
+                                    <form @submit.prevent="createUser">
+                                        <div class="row">
+                                            <div class="col-md-4 form-group">
+                                                <label>Name</label>
+                                                <input v-model="form.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" placeholder="Juan Dela Cruz">
+                                                <has-error :form="form" field="name"></has-error>
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label>Email</label>
+                                                <input v-model="form.email" type="email" name="email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" placeholder="example@email.com">
+                                                <has-error :form="form" field="email"></has-error>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 form-group">
+                                                <label>User Role</label>
+                                                <input v-model="form.type" type="text" name="text" class="form-control" value="1" disabled>
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label>Specialization</label>
+                                                <a-select mode="multiple" style="width: 100%" placeholder="Please select" @change="handleChange">
+                                                    <a-select-option v-for="item in items" :key="item.sp">
+                                                        {{ item.sp }}
+                                                    </a-select-option>
+                                                </a-select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 form-group">
+                                                <label>Password</label>
+                                                <input v-model="form.password" type="text" name="password" class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
+                                                <has-error :form="form" field="password"></has-error>
+                                            </div>
+                                        </div>
+                                        <button :disabled="form.busy" type="submit" class="btn btn-primary">Create</button>
+                                    </form>
                                 </div>
-                                <div class="col-sm-12 col-md-7">
-                                    <div class="dataTables_paginate paging_simple_numbers" id="dataTableExample_paginate">
-                                        <ul class="pagination">
-                                            <li class="paginate_button page-item previous disabled" id="dataTableExample_previous"><a href="#" aria-controls="dataTableExample" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
-                                            <li class="paginate_button page-item active"><a href="#" aria-controls="dataTableExample" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
-                                            <li class="paginate_button page-item "><a href="#" aria-controls="dataTableExample" data-dt-idx="2" tabindex="0" class="page-link">2</a></li>
-                                            <li class="paginate_button page-item "><a href="#" aria-controls="dataTableExample" data-dt-idx="3" tabindex="0" class="page-link">3</a></li>
-                                            <li class="paginate_button page-item next" id="dataTableExample_next"><a href="#" aria-controls="dataTableExample" data-dt-idx="4" tabindex="0" class="page-link">Next</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            </a-tab-pane>
+                        </a-tabs>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+<script>
+import Form from 'vform';
+const key = 'updatable';
+export default {
+    data() {
+        return {
+            users: {},
+            items: [
+                { sp: 'System Analysis and Design' },
+                { sp: 'Data Science' },
+                { sp: 'Programming' }
+            ],
+            form: new Form({
+                id: '',
+                name: '',
+                email: '',
+                specialization: '',
+                password: '',
+                type: 'Subject Teacher',
+                role: 2
+            }),
+            visibleTable: true,
+            title: 'Research List',
+            modalVisible: false,
+            confirmLoading: false,
+            spinning: true,
+            spinningVisible: true
+        };
+    },
+    methods: {
+        handleChange(value) {
+            console.log(`selected ${value}`);
+        },
+        callback(key) {
+            console.log(key);
+        },
+    },
+};
+
+</script>
