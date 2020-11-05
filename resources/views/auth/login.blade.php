@@ -1,64 +1,150 @@
 @extends('layouts.app')
 
+@section('title', 'Login or Sign Up')
 @section('content')
+<!-- Outer Row -->
+  <img src="./img/cce.png" width="190px" style="margin-bottom: -30px;z-index:-1;margin-left: 20%">
+<div class="container">
+    <div class="row">
+   
+    <form action="{{ route('login') }}" method="POST">
 
-    <!-- Outer Row -->
-  <div class="main-wrapper">
-    <div class="page-wrapper full-page">
-      <div class="page-content d-flex align-items-center justify-content-center">
+        @csrf
+        <div class="col-md-8 form-group">
+            <div class="card" style="padding:30px;">
 
-        <div class="row w-100 mx-0 auth-page">
-          <div class="col-md-8 col-xl-6 mx-auto">
-            <div class="card">
-              <div class="row">
-                <div class="col-md-4 pr-md-0">
-                  <div class="auth-left-wrapper">
-
-                  </div>
-                </div>
-                <div class="col-md-8 pl-md-0">
-                  <div class="auth-form-wrapper px-4 py-5">
-                    <a href="#" class="noble-ui-logo d-block mb-2">Noble<span>UI</span></a>
-                    <h5 class="text-muted font-weight-normal mb-4">Welcome back! Log in to your account.</h5>
-                    <form class="forms-sample" class="user" method="POST" action="{{ route('login') }}">
-                       @csrf
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input id="email" type="email" class="form-control form-control-user{{ $errors->has('email') ? ' is-invalid' : '' }} " name="email" value="{{ old('email') }}" required placeholder="Email">
+                <div class="mt-4 text-center">
+                    <h5>
+                        Log in to your account
+                    </h5>
+                    <span>
+                        Login with your credentials
+                    </span>
+                    <div class="mt-3">
+                         <a-input class="form-control-user{{ $errors->has('email') ? ' is-invalid' : '' }} " name="email" type="email" value="{{ old('email') }}" required placeholder="Email">
+                            <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
+                        </a-input>
                          @if ($errors->has('email'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('email') }}</strong>
-                            </span>
-                       @endif
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input id="password" type="password" class="form-control form-control-user{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" autocomplete="current-password" placeholder="Password">
-                         @if ($errors->has('password'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('password') }}</strong>
-                            </span>
-                       @endif
-                      </div>
-                      <div class="form-check form-check-flat form-check-primary">
-                        <label class="form-check-label">
-                          <input type="checkbox" class="form-check-input">
-                          Remember me
-                        </label>
-                      </div>
-                      <div class="mt-3">
-                        <button type="submit" class="btn btn-primary mr-2 mb-2 mb-md-0 text-white">Login</a>
-                      </div>
-                      <a href="{{ route('register')}}" class="d-block mt-3 text-muted">Not a user? Sign up</a>
-                    </form>
-                  </div>
+                <span class="invalid-feedback" role="alert">
+                    <strong>
+                        {{ $errors->first('email') }}
+                    </strong>
+                </span>
+                @endif
+                    </div>
                 </div>
-              </div>
+                <div class="mt-3">
+                    <a-input-password name="password" placeholder="Password" required/>
+                    <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.25)" />
+                     </a-input>
+                </div>
+                <br>
+                <div class="d-flex justify-content-between">
+                    <div class="form-check">
+                        <input class="form-check-input " id="flexCheckDefault" type="checkbox" value="">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Keep me Logged in
+                            </label>
+                        </input>
+                    </div>
+                    <div>
+                        <a class="forgot" href="/password/reset">
+                            Forgot Password?
+                        </a>
+                    </div>
+                </div>
+                <br>
+                <div class="mt-2">
+                    <button class="btn btn-danger btn-block" type="submit">
+                        Log In
+                    </button>
+                </div>
+                <br>
+                <div class="text-center intro">
+                    <span class="d-block account">
+                         Don't have an account?
+                    </span>
+                  <a href="{{ route('register')}}">
+                    <span class="d-block account">
+                       Sign up here.
+                    </span>
+                  </a>
+                  <br>
+                    <span class="contact">
+                        Upon creating your account you have to wait for the administrator to approved your account.
+                    </span>
+                </div>
             </div>
-          </div>
         </div>
+    </form>
+</div>
+</div>
+<style>
+.container {
+    justify-content: center;
+}
+.account {
+    font-weight: 500;
+    font-size: 17px
+}
 
-      </div>
-    </div>
+.contact {
+    font-size: 13px
+}
 
+.form-control {
+    text-indent: 14px
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #4a148c;
+    outline: 0;
+    box-shadow: none
+}
+
+.inputbox {
+    margin-bottom: 10px;
+    position: relative
+}
+
+.inputbox i {
+    position: absolute;
+    left: 8px;
+    top: 12px;
+    color: #dadada
+}
+
+.form-check-label {
+    font-size: 13px
+}
+
+.form-check-input {
+    width: 14px;
+    height: 15px;
+    margin-top: 5px
+}
+
+.forgot {
+    font-size: 14px;
+    text-decoration: none;
+    color: #4A148C
+}
+
+.mail {
+    color: #4a148c;
+    text-decoration: none
+}
+
+.form-check {
+    cursor: pointer
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #4A148C;
+    border-color: #4A148C
+}
+</style>
 @endsection

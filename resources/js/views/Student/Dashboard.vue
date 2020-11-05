@@ -1,9 +1,38 @@
 <template>
-	<div class="page-content">
-		 <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
-          <div>
-            <h4 class="mb-3 mb-md-0">Dashboard</h4>
-          </div>
-        </div>      
-	</div>
+    <div class="page-content">
+        <div class="row">
+            <div class="col-12 col-md-9">
+                <div class="card">
+                    <div class="card-body">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 d-md-block">
+                <h6 class="mb-4">Milestone Capstone 1</h6>
+                <a-steps direction="vertical" :current="0">
+                    <a-step title="Chapter 1 to 3" />
+                    <a-step title="Capstone 1 System" description="" />
+                    <a-step title="Evaluation" description="" />
+                    <a-step title="Grammarly and Plagiarism" description="" />
+                    <a-step title="Validator" description="" />
+                </a-steps>
+            </div>
+        </div>
+    </div>
+    </div>
 </template>
+<script>
+export default {
+    data() {
+        return {}
+    },
+    mounted() {
+        window.onpopstate = event => {
+            if (window.localStorage.getItem("info") !== null && this.$route.path == "/login") {
+                this.$router.push("/");
+            }
+        }
+    }
+};
+
+</script>

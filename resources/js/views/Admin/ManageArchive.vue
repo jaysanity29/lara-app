@@ -1,8 +1,9 @@
 <template>
     <div class="page-content">
+        <a-back-top />
         <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
             <div>
-                <h4 class="mb-3 mb-md-0">Research Archive</h4>
+                <h4 class="mb-3 mb-md-0" style="color: #52616b">Research Archive</h4>
             </div>
         </div>
         <div class="row">
@@ -17,19 +18,21 @@
                                 </span>
                                 <div class="table-responsive pt-3">
                                     <a-table :columns="columns" :data-source="researches" @change="handleChange" :pagination="{ pageSize: 10}" :scroll="{ x:700, y: 500 }">
+                                        <a-tag slot="year" slot-scope="text, record" :color="'#f50'">
+                                            {{ record.year }}
+                                        </a-tag>
                                         <a slot="action" slot-scope="text, record">
                                             <a-dropdown>
                                                 <a-menu slot="overlay">
-                                                    <a-menu-item key="1">
-                                                        <a-icon type="check" />Approve
+                                                    <a-menu-item key="1" @click="showModal(record)">
+                                                        <a-icon type="user" />Edit
                                                     </a-menu-item>
-                                                    <a-menu-item key="2">
-                                                        <a-icon type="close" />Disapprove
+                                                    <a-menu-item key="2" @click="deleteUser(record.id)">
+                                                        <a-icon type="user-delete" />Delete
                                                     </a-menu-item>
-                                                    <a-menu-item key="3" @click="showModal(record)">
-                                                        <a-icon type="user" />Edit </a-menu-item>
-                                                    <a-menu-item key="4" @click="deleteUser(record.id)">
-                                                        <a-icon type="user-delete" />Delete</a-menu-item>
+                                                    <a-menu-item key="3" @click="viewPDF(record)">
+                                                        <a-icon type="user-delete" />View
+                                                    </a-menu-item>
                                                 </a-menu>
                                                 <a-button type="dashed" style="margin-left: 8px">
                                                     <a-icon type="setting" /> More Actions
@@ -51,6 +54,9 @@
                                     <a-icon type="plus-square" />
                                     Add New Research
                                 </span>
+                                <a-divider orientation="left">
+                                    Research Information
+                                </a-divider>
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-4 form-group">
@@ -60,6 +66,17 @@
                                         <div class="col-md-3 form-group">
                                             <label>Adviser</label>
                                             <input v-model="research.adviser" type="text" name="adviser" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 form-group">
+                                            <label>Author(s)</label>
+                                            <a-input v-model="research.authors" type="text" class="form-control" mode="tags" :token-separators="[',']" >
+                                                <a-tooltip slot="suffix" title="Please use comma to separate author(s)
+                                                Example: Juan Dela Cruz, Thor Magtanggol">
+                                                    <a-icon type="info-circle" style="color: rgba(0,0,0,.45)" />
+                                                </a-tooltip>
+                                            </a-input>
                                         </div>
                                         <div class="col-md-4 form-group">
                                             <label>Year Published</label>
@@ -75,22 +92,13 @@
                                                 </a-select-option>
                                             </a-select>
                                         </div>
-                                    </div>
-                                    <div class="row">
+                                        <a-divider orientation="left">
+                                            Upload a PDF File
+                                        </a-divider>
                                         <div class="col-md-4 form-group">
-                                            <label>Author(s)</label>
-                                            <a-input v-model="research.authors" type="text" class="form-control">
-                                                <a-tooltip slot="suffix" title="Please use comma to separate author(s)
-                                                Example: Juan Dela Cruz, Thor Magtanggol">
-                                                    <a-icon type="info-circle" style="color: rgba(0,0,0,.45)" />
-                                                </a-tooltip>
-                                            </a-input>
-                                        </div>
-                                        <div class="col-md-4 form-group">
-                                            <label>Upload a PDF File</label>
                                             <div class="clearfix">
                                                 <a-upload :file-list="fileList" :remove=" handleRemove" :before-upload="beforeUpload" accept=".pdf">
-                                                    <a-button :disabled="file">
+                                                    <a-button :disabled="file"> 
                                                         <a-icon type="upload" /> Select a PDF File </a-button>
                                                 </a-upload>
                                             </div>
@@ -106,6 +114,14 @@
                                 </div>
                             </a-tab-pane>
                         </a-tabs>
+                        <!--  <a-modal :visible="visible">
+                            
+                        </a-modal> -->
+                        <a-drawer :placement="'right'" width="60%" :after-visible-change="afterVisibleChange" :visible="visible" :closable="true" @close="onClose">
+                            <div>
+                                <pdf v-for="i in numPages" :key="i" :src="pdfFile" :page="i" @num-pages="pageCount = $event" @page-loaded="currentPage = $event"></pdf>
+                            </div>
+                        </a-drawer>
                     </div>
                 </div>
             </div>
@@ -114,17 +130,13 @@
 </template>
 </style>
 <script>
+import pdf from 'vue-pdf';
 export default {
+    components: {
+        pdf
+    },
     data() {
         return {
-            filteredInfo: null,
-            sortedInfo: null,
-            researches: [],
-            singleFile: true,
-            fileList: [],
-            uploading: false,
-            file: false,
-            authors: {},
             research: {
                 title: '',
                 adviser: '',
@@ -133,9 +145,24 @@ export default {
                 fileName: '',
                 year: ''
             },
+            filteredInfo: null,
+            sortedInfo: null,
+            researches: [],
+            singleFile: true,
+            fileList: [],
+            uploading: false,
+            file: false,
+            authors: {},
+            pdfFile: '',
             visibleTable: true,
+            visible: false,
             spinning: true,
-            spinningVisible: true
+            spinningVisible: true,
+            currentPage: 0,
+            pageCount: 0,
+            numPages: undefined,
+            researchTitle: '',
+            spinningPdf: true,
         }
 
     },
@@ -151,8 +178,10 @@ export default {
 
                     title: 'Research Title',
                     dataIndex: 'title',
+                    key: 'title',
+
+
                     ellipsis: true,
-                    width: 200,
                 },
                 {
                     title: 'Author(s)',
@@ -168,6 +197,9 @@ export default {
                     title: 'Year Published',
                     dataIndex: 'year',
                     key: 'year',
+                    scopedSlots: {
+                        customRender: 'year',
+                    },
                     sorter: (a, b) => a.year - b.year,
                     sortOrder: sortedInfo.columnKey === 'year' && sortedInfo.order,
                 },
@@ -215,6 +247,24 @@ export default {
             }
             return false;
         },
+        async viewPDF(record) {
+
+            let loadingTask = pdf.createLoadingTask('/file/research-archive/' + record.file_name);
+            this.pdfFile = loadingTask;
+            this.researchTitle = record.title;
+            await this.pdfFile.promise.then(pdf => {
+                this.numPages = pdf.numPages;
+
+            })
+            this.visible = true;
+        },
+        afterVisibleChange(val) {
+
+        },
+        onClose() {
+            this.visible = false;
+            this.pdfFile = '';
+        },
         createArchive() {
             let config = {
                 headers: {
@@ -257,7 +307,6 @@ export default {
         showAllResearches() {
             axios.get('/api/archive').then(({ data }) => {
                 this.researches = data.data;
-                console.log(this.researches);
                 this.spinning = false
                 this.spinningVisible = false
             });

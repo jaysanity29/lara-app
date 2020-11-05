@@ -1,52 +1,52 @@
 <template>
     <nav class="sidebar" >
-        <div class="sidebar-header" style="background-color: #0f3057">
-            <router-link to="/admin/dashboard" class="sidebar-brand" >
+        <div class="sidebar-header" style="background-color: #0278ae">
+            <router-link to="#" class="sidebar-brand" >
                 <span></span>
-                <span>Coordinator</span>
+                <span style="color:white;">Coordinator</span>
             </router-link>
             <div class="sidebar-toggler not-active">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
         </div>
         <div class="sidebar-body">
             <ul class="nav">
                 <li class="nav-item nav-category">Main</li>
-                <li class="nav-item">
-                    <router-link to="/admin/dashboard" class="nav-link" exact>
+                <li :class="[currentPage.includes('/admin/dashboard') ? activeClass : '', 'nav-item']">
+                    <router-link :to="{ name: 'Dashboard'}" class="nav-link">
                         <i class="link-icon" data-feather="box"></i>
                         <span class="link-title">Dashboard</span>
                     </router-link>
                 </li>
-                <li class="nav-item">
-                    <router-link to="/admin/archive" class="nav-link" exact>
+                <li :class="[currentPage.includes('/admin/archive') ? activeClass : '', 'nav-item']">
+                    <router-link :to="{ name : 'Archive' }" class="nav-link">
                         <i class="link-icon" data-feather="layers"></i>
                         <span class="link-title">Research Archive</span>
                     </router-link>
                 </li>
-                <li class="nav-item">
-                    <router-link to="/admin/schedule" class="nav-link">
+                <li :class="[currentPage.includes('/admin/schedule') ? activeClass : '', 'nav-item']">
+                    <router-link :to="{ name : 'Schedule' }" class="nav-link">
                         <i class="link-icon" data-feather="calendar"></i>
                         <span class="link-title">Schedule</span>
                     </router-link>
                 </li>
                 <li class="nav-item nav-category">Manage Users</li>
-                <li class="nav-item">
-                    <router-link to="/admin/manage/students" class="nav-link">
+                <li :class="[currentPage.includes('/admin/students') ? activeClass : '', 'nav-item']">
+                    <router-link :to="{ name : 'Students' }" class="nav-link">
                         <i class="link-icon" data-feather="info"></i>
                         <span class="link-title">Student</span>
                     </router-link>
                 </li>
-                <li class="nav-item">
+                <li :class="[currentPage.includes('/admin/manage/subject-teacher') ? activeClass : '', 'nav-item']">
                     <router-link to="/admin/manage/subject-teacher" class="nav-link">
                         <i class="link-icon" data-feather="users"></i>
                         <span class="link-title">Subject Teacher</span>
                     </router-link>
                 </li>
-                <li class="nav-item">
-                    <router-link to="/admin/manage/research-personnel" class="nav-link">
+                <li :class="[currentPage.includes('/admin/manage/research-personnel') ? activeClass : '', 'nav-item']">
+                    <router-link :to="{ name : 'Research Personnel' }" class="nav-link">
                         <i class="link-icon" data-feather="file-text"></i>
                         <span class="link-title">Research Personnel</span>
                     </router-link>
@@ -104,22 +104,14 @@
 export default {
     data() {
         return {
-            path: this.$route && this.$route.path
+            activeClass: 'active',
         }
     },
-    watch: {
-        $route(route) {
-            this.path = route.path;
+    computed: {
+        currentPage() {
+            return this.$route.path;
         }
-    }
+    },
 };
 </script>
-<style type="text/css">
-#components-layout-demo-custom-trigger .logo {
-    height: 32px;
-    background: rgba(255, 255, 255, 0.2);
-    margin: 16px;
-}
-
-</style>
 

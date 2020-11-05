@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 use Auth;
 use App\Http\Flash;
+use Session;
 
 class LoginController extends Controller
 {
@@ -21,27 +23,32 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
-
     /**
      * Where to redirect users after login.
      *
      * @var string
      */
     // protected $redirectTo = '/admin/dashboard';
+    protected function authenticated(Request $request, $user)
+    {   
+        session()->flash('message','Successfully Login.');
+    }
     protected function redirectTo() {
+
         if(Auth::user()->type == 1) {
-        session()->flash('message', 'This is a flash message containing feedback to the user!'); 
-            return 'admin/dashboard';
+       
+            return '/admin/dashboard';
         }
         else if (Auth::user()->type == 2) {
-            return 'student/dashboard';
+            return '/student/dashboard';
         }
         else if (Auth::user()->type == 3) {
-            return 'adviser/dashboard';
+            return '/research-personnel/dashboard';
         }
         else if (Auth::user()->type == 4) {
-            return 'panel/dashboard';
+            return '/panel/dashboard';
         }
+        
     }
     /**
      * Create a new controller instance.

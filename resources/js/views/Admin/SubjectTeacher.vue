@@ -1,8 +1,9 @@
 <template>
     <div class="page-content">
+        <a-back-top />
         <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
             <div>
-                <h4 class="mb-3 mb-md-0">Manage Subject Teacher</h4>
+                <h4 class="mb-3 mb-md-0" style="color: #52616b">Manage Subject Teacher</h4>
             </div>
         </div>
         <div class="row">
@@ -15,61 +16,9 @@
                                     <a-icon type="ordered-list" />
                                     List of Subject Teacher
                                 </span>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <a-dropdown-button>
-                                            Sort by Status
-                                            <a-menu slot="overlay" @click="handleMenuClick">
-                                                <a-menu-item key="1">
-                                                    <a-icon type="check" />Approved
-                                                </a-menu-item>
-                                                <a-menu-item key="3">
-                                                    <a-icon type="close" />Disapproved
-                                                </a-menu-item>
-                                            </a-menu>
-                                        </a-dropdown-button>
-                                    </div>
-                                    <div class="col-md-3 ml-auto">
-                                        <a-input-search placeholder="Search user" style="width: 200px" @search="onSearch" />
-                                        <br /><br />
-                                    </div>
-                                </div>
                                 <div class="table-responsive pt-3">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Specialization</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Ryan Pilapil</td>
-                                                <td>rpilapil@umindanao.edu.ph</td>
-                                                <td>System Analysist and Design</td>
-                                                <td>
-                                                    <a-tag color="green"> Approved </a-tag>
-                                                </td>
-                                                <td>
-                                                    <a-dropdown>
-                                                        <a-menu slot="overlay">
-                                                            <a-menu-item key="1" @click="showModal(user)">
-                                                                <a-icon type="user" />Edit </a-menu-item>
-                                                            <a-menu-item key="2" @click="deleteUser(user.id)">
-                                                                <a-icon type="user-delete" />Delete</a-menu-item>
-                                                        </a-menu>
-                                                        <a-button type="dashed" style="margin-left: 8px">
-                                                            <a-icon type="setting" /> Actions
-                                                            <a-icon type="down" />
-                                                        </a-button>
-                                                    </a-dropdown>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <a-table :columns="columns ">
+                                    </a-table>
                                 </div>
                             </a-tab-pane>
                             <a-tab-pane key="2">
@@ -151,6 +100,39 @@ export default {
             spinning: true,
             spinningVisible: true
         };
+    },
+    computed: {
+        columns() {
+            let { sortedInfo, filteredInfo } = this;
+            sortedInfo = sortedInfo || {};
+            filteredInfo = filteredInfo || {};
+            const columns = [{
+                    title: 'Group',
+                    dataIndex: 'group',
+                    width: 200,
+                },
+                {
+                    title: 'Defense Type',
+                    dataIndex: 'type',
+                },
+                {
+                    title: 'Date & Time',
+                    dataIndex: 'date',
+                },
+                {
+                    title: 'Venue',
+                    dataIndex: 'year',
+                },
+                {
+                    title: 'Action',
+                    key: 'action',
+                    scopedSlots: {
+                        customRender: 'action',
+                    },
+                },
+            ];
+            return columns;
+        }
     },
     methods: {
         handleChange(value) {

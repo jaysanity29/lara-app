@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('type');
+            $table->string('group')->default('no-group');
             $table->string('status')->default('pending');
             $table->string('photo')->default('photo.png');
             $table->string('expertises')->nullable();       

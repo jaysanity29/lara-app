@@ -1,6 +1,5 @@
 import Dashboard from '../views/Admin/Dashboard';
-import Profile from '../components/Profile.vue';
-import NotFound from '../views/NotFound';
+
 import ManageStudents from '../views/Admin/ManageStudents';
 import SubjectTeacher from '../views/Admin/SubjectTeacher';
 import CreateStudent from '../views/Admin/CreateUserStudent';
@@ -13,31 +12,120 @@ import StudentDashboard from '../views/Student/Dashboard.vue';
 import StudentResearchArchive from '../views/Student/ResearchArchive.vue';
 import StudentSchedule from '../views/Student/StudentSchedule.vue';
 import StudentChat from '../views/Student/StudentChat.vue';
+import PendingAccount from '../components/PendingAccount.vue';
 
 export default [
-    // Admin
-    { path: '/admin/dashboard', component: Dashboard },
-    { path: '/home', redirect: '/dashboard' },
-    { path: '/admin/schedule', component: ManageSchedule },
-    { path: '/admin/archive', component: ManageArchive },
-    { path: '/admin/profile', component: Profile },
 
-    { path: '/admin/manage/students', component: ManageStudents },
-    { path: '/admin/manage/students/create', component: CreateStudent },
-    { path: '/admin/manage/subject-teacher', component: SubjectTeacher },
-    { path: '/admin/manage/research-personnel', component: ResearchPersonnel },
-    { path: '/admin/profile', component: Profile },
-    { path: '/admin/manage/capstone-one', component: CapstoneOne },
-    { path: '/admin/manage/capstone-two', component: CapstoneTwo },
-    { path: '/login' },
-    { path: '/register' },
-    { path: '/page_not_found', component: NotFound },
-    { path: '*', redirect: '/page_not_found' },
+    {
+        path: '/admin/page-not-found',
+        component : NotFound,
+    },
+    {
+        path: '*',
+        redirect: '/admin/page-not-found',
+    },
+    {
+        path: '*',
+        component : NotFound,
+    },
+    {
+        path: '/pending-account',
+        name: 'Pending',
+        component: PendingAccount
+    },
+    // Admin
+    {
+        path: '/admin/dashboard',
+        name: 'Dashboard',
+        component: Dashboard
+    },
+    {
+        path: '/home',
+        redirect: '/dashboard'
+    },
+    {
+        path: '/admin/schedule',
+        name: 'Schedule',
+        component: ManageSchedule
+    },
+    {
+        path: '/admin/archive',
+        name: 'Archive',
+        component: ManageArchive
+    },
+    {
+        path: '/admin/profile',
+        name: 'Profile',
+        component: Profile
+    },
+    {
+        path: '/admin/chat',
+        name: 'Message',
+        component: Chat
+    },
+    {
+        path: '/admin/manage/students',
+        name: 'Students',
+        component: ManageStudents
+    },
+    {
+        path: '/admin/manage/subject-teacher',
+        name: 'Subject Teacher',
+        component: SubjectTeacher
+    },
+    {
+        path: '/admin/manage/research-personnel',
+        name: 'Research Personnel',
+        component: ResearchPersonnel
+    },
+    {
+        path: '/admin/profile',
+        name: 'Profile',
+        component: Profile
+    },
+    {
+        path: '/admin/manage/capstone-one',
+        component: CapstoneOne
+    },
+    {
+        path: '/admin/manage/capstone-two',
+        component: CapstoneTwo
+    },
+    {
+        path: '/login'
+    },
+    {
+        path: '/register'
+    },
+
 
     // Student
-    { path: '/student/dashboard', component: StudentDashboard },
-    { path: '/student/research-archive', component: StudentResearchArchive },
-    { path: '/student/schedule', component: StudentSchedule },
-    { path: '/student/chat', component: StudentChat }
-
+    {
+        path: '/student/chat',
+        component: Chat
+    },
+    {
+        path: '/student/dashboard',
+        component: StudentDashboard,
+        name: 'Dashboard'
+    },
+    {
+        path: '/student/research-archive',
+        component: StudentResearchArchive,
+        name: 'Research Archive'
+    },
+    {
+        path: '/student/schedule',
+        component: StudentSchedule,
+        name: 'Schedule'
+    },
+    {
+        path: '/student/chat',
+        component: StudentChat
+    },
+    {
+        path: '/page-not-found',
+        component: NotFound
+    },
+  
 ]

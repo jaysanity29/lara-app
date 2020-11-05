@@ -1,68 +1,57 @@
 <template>
     <!-- Page Heading -->
     <div class="page-content">
+        <a-back-top />
         <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
             <div>
-                <h4 class="mb-3 mb-md-0">Dashboard</h4>
-            </div>
-        </div>
-        <div class="row">
-          
-             <div class="col-md-6 grid-margin stretch-card">
-                <a-card title="NUMBER OF GROUPS">
-                    <p>card content</p>
-                </a-card>
-            </div>
-             <div class="col-md-6 grid-margin stretch-card">
-                <a-card title="NUMBER OF GROUPS" :bordered="true">
-                    <p>card content</p>
-                </a-card>
+                <h4 class="mb-3 mb-md-0" style="color: #52616b">Dashboard</h4>
             </div>
         </div>
         <!-- Content Row -->
-        <a-row :gutter="15">
-            <a-col :span="10">
-                <a-card title="NUMBER OF GROUPS" :bordered="true">
-                    <p>card content</p>
-                </a-card>
-            </a-col>
-            <a-col :span="10">
-                <a-card title="NUMBER OF RESEARCHES" :bordered="true">
-                    <p>card content</p>
-                </a-card>
-            </a-col>
-            <a-col :span="8">
-                <a-card title="NUMBER OF ADVISERS" :bordered="true">
-                    <p>card content</p>
-                </a-card>
-            </a-col>
-        </a-row>
-        <br>
-        <a-row :gutter="16">
-            <a-col :span="8">
-                <a-card title="NUMBER OF SUBJECT TEACHERS" :bordered="true">
-                    <p>card content</p>
-                </a-card>
-            </a-col>
-            <a-col :span="8">
-                <a-card title="NUMBER OF RESEARCHES" :bordered="true">
-                    <p>card content</p>
-                </a-card>
-            </a-col>
-            <a-col :span="8">
-                <a-card title="SCHEDULE FOR TODAY" :bordered="true">
-                    <p>card content</p>
-                </a-card>
-            </a-col>
-        </a-row>
-        <br>
-        <a-row :gutter="16">
-            <a-col :span="8">
-                <a-card title="NUMBER OF PANELS" :bordered="true">
-                    <p>card content</p>
-                </a-card>
-            </a-col>
-        </a-row>
+        <div class="row">
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-baseline">
+                            <h6 class="card-title mb-0">Students</h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-md-12 col-xl-5">
+                                <h3 class="mb-2"> {{ students }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-baseline">
+                            <h6 class="card-title mb-0">Researches</h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-md-12 col-xl-5">
+                                <h3 class="mb-2">3,897</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-baseline">
+                            <h6 class="card-title mb-0">New Customers</h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-md-12 col-xl-5">
+                                <h3 class="mb-2">3,897</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Group Progress-->
         <div class="row">
             <div class="col-md-6 grid-margin stretch-card">
@@ -167,19 +156,33 @@ export default {
     data() {
         return {
             login: false,
+            students: '',
         }
     },
     beforeMount() {
-        
+        this.countStudent();
     },
     mounted() {
-       
+         window.onpopstate = event => {
+            if(window.localStorage.getItem("info") !== null && this.$route.path == "/login") {
+                    this.$router.push("/admin/dashboard");
+            }
+        }
     },
     created() {
-       
+
     },
     methods: {
-        
+        countStudent() {
+            axios.get('/api/countStudent').then(({ data }) => {
+                this.students = data.users;
+            })
+        },
+        countResearches() {
+            axios.get('/api/countResearches').then(({data}) => {
+
+            })
+        }
     },
 };
 

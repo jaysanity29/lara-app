@@ -21,8 +21,9 @@ class StudentMiddleware
         else if(auth()->check() && $request->user()->type == 1){
             return redirect()->guest('/admin/dashboard');
         }
+       
         else if(auth()->check() && $request->user()->type == 3){
-            return redirect()->guest('/adviser/dashboard');
+            return redirect()->guest('/research-personnel/dashboard');
         }
         else{
             return redirect()->guest('/');

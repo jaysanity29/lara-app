@@ -27,12 +27,8 @@ class ArchiveController extends Controller
      */
     public function store(Request $request)
     {
-       
-
         $file = $request->file('file');
         $ext = $file->getClientOriginalExtension();
-            
-      
         $name = time().'.'.$ext;
         if($request->file->move(public_path('/file/research-archive'),$name)){
 

@@ -22,7 +22,7 @@ class AdminMiddleware
             return redirect()->guest('/student/dashboard');
         }
          else if(auth()->check() && $request->user()->type == 3){
-            return redirect()->guest('/adviser/dashboard');
+            return redirect()->guest('/research-personnel/dashboard');
         }
         else{
             return redirect()->guest('/');

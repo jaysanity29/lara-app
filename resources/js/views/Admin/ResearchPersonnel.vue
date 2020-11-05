@@ -1,8 +1,9 @@
 <template>
     <div class="page-content">
+        <a-back-top />
         <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
             <div>
-                <h4 class="mb-3 mb-md-0">Research Personnel</h4>
+                <h4 class="mb-3 mb-md-0" style="color: #52616b">Research Personnel</h4>
             </div>
         </div>
         <div class="row">
@@ -84,10 +85,6 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-md-4 form-group">
-                                                <label>User Role</label>
-                                                <input v-model="form.type" type="text" name="text" class="form-control" value="1" disabled>
-                                            </div>
-                                            <div class="col-md-4 form-group">
                                                 <label>Field of Expertise</label>
                                                 <a-select mode="multiple" style="width: 100%" placeholder="Please select" @change="handleChangeExp">
                                                     <a-select-option v-for="item in items" :key="item.sp">
@@ -122,15 +119,6 @@
                         <label>Email</label>
                         <input v-model="form.email" type="email" name="email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
                         <has-error :form="form" field="email"></has-error>
-                    </div>
-                    <div class="form-group">
-                        <label>User Role</label>
-                        <input v-model="form.type" type="text" name="text" class="form-control" value="1" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input v-model="form.password" type="text" name="password" class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
-                        <has-error :form="form" field="password"></has-error>
                     </div>
                 </form>
             </a-modal>
@@ -207,11 +195,11 @@ export default {
                 {
                     title: 'Field of Expertise',
                     dataIndex: 'expertises',
-
+                    ellipsis: true,
                     scopedSlots: {
                         customRender: 'expertises',
                     },
-                    ellipsis: true,
+                    
                 },
                 {
                     title: 'Status',
@@ -256,7 +244,7 @@ export default {
         showModal(record) {
             this.modalVisible = true;
             this.form.reset;
-            this.form.fill(user);
+            this.form.fill(record);
         },
         handleSearch(selectedKeys, confirm, dataIndex) {
             confirm();
@@ -281,6 +269,19 @@ export default {
             this.form.exp = `${value}`;
             console.log(this.form.exp);
         },
+        handleOk(e) {
+            this.confirmLoading = true;
+            this.form.patch('/api/updateRP/' + this.form.id).then(() => {
+                this.confirmLoading = false;
+                this.modalVisible = false;
+                this.confirmLoading = false;
+                this.loadUsers();
+                this.clear();
+                this.$message.success('User updated successfully', 2);
+            }).catch(() => {
+                
+            });
+        },
         callback(key) {
             console.log(key);
         },
@@ -298,19 +299,17 @@ export default {
             this.clear();
             this.loadUsers();
         },
-        async loadUsers() {
+        loadUsers() {
             axios.get('/api/getPersonnels').then(({ data }) => {
                 this.users = data
                 this.exps = this.users.expertises.split(',');
-                console.log(this.exps);
             });
         },
         clear() {
             this.form.name = '';
             this.form.email = '';
             this.form.password = '';
-            this.form.exp = '';
-
+            this.form.exp = ''
         }
     },
 };

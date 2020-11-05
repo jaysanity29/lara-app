@@ -1,8 +1,67 @@
 <template>
     <div class="page-content">
+        <a-back-top />
         <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
             <div>
-                <h4 class="mb-3 mb-md-0">Manage Student </h4>
+                <h4 class="mb-3 mb-md-0" style="color: #52616b">Manage Student </h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-md-3 grid-margin">
+                <div class="card" style="background-color: #9ab3f5">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-baseline" style="color:white">
+                            <h6 class="card-title mb-0" style="color:white">Students</h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-md-12 col-xl-5" style="color:white">
+                                <h3 class="mb-2" style="color:white"> {{ students }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-3 grid-margin">
+                <div class="card" style="background-color: #e0f9b5">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-baseline">
+                            <h6 class="card-title mb-0" style="color:white">Approved</h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-md-12 col-xl-5">
+                                <h3 class="mb-2" style="color:white"> {{ students }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-baseline">
+                            <h6 class="card-title mb-0">Pending</h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-md-12 col-xl-5">
+                                <h3 class="mb-2"> {{ students }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3 grid-margin stretch-card">
+                <div class="card" style="background-color: #f67280">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-baseline">
+                            <h6 class="card-title mb-0">Disapproved</h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-md-12 col-xl-5">
+                                <h3 class="mb-2"> {{ students }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -16,7 +75,7 @@
                                     List of Students
                                 </span>
                                 <div class="table-responsive pt-3">
-                                    <a-table :columns="columns" :data-source="users" @change="handleChange" :pagination="{ pageSize: 10}" :scroll="{ x:700, y: 500 }">
+                                    <a-table :columns="columns" :data-source="users" @change="handleChange" :pagination="{ pageSize: 10}" :scroll="{ x:700, y: 500 }" :loading="loading">
                                         <div slot="filterDropdown" slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }" style="padding: 5px">
                                             <a-input v-ant-ref="c => (searchInput = c)" :placeholder="`Search ${column.dataIndex}`" :value="selectedKeys[0]" style="width: 188px; margin-bottom: 8px; display: block;" @change="e => setSelectedKeys(e.target.value ? [e.target.value] : [])" @pressEnter="() => handleSearch(selectedKeys, confirm, column.dataIndex)" />
                                             <a-button type="primary" icon="search" size="small" style="width: 90px; margin-right: 8px" @click="() => handleSearch(selectedKeys, confirm, column.dataIndex)">
@@ -27,7 +86,7 @@
                                             </a-button>
                                         </div>
                                         <a-icon slot="filterIcon" slot-scope="filtered" type="search" :style="{ color: filtered ? '#108ee9' : undefined }" />
-                                        <a-tag slot="status" slot-scope="text, record" :color="record.status === 'Approved' ? 'green' : 'geekblue'">
+                                        <a-tag slot="status" slot-scope="text, record" :color="record.status === 'Approved' ? 'green' : record.status === 'Pending' ? 'geekblue' : 'volcano'">
                                             {{ record.status | capitalize }}
                                         </a-tag>
                                         <span slot="created_at" slot-scope="text, record">
@@ -36,10 +95,10 @@
                                         <a slot="action" slot-scope="text, record">
                                             <a-dropdown>
                                                 <a-menu slot="overlay">
-                                                    <a-menu-item key="1">
+                                                    <a-menu-item key="1" @click="statusApprove(record.id)" :disabled="record.status === 'Approved'">
                                                         <a-icon type="check" />Approve
                                                     </a-menu-item>
-                                                    <a-menu-item key="2">
+                                                    <a-menu-item key="2" @click="disapproveStudent(record.id)" :disabled="record.status === 'Pending' || record.status === 'Disapproved'">
                                                         <a-icon type="close" />Disapprove
                                                     </a-menu-item>
                                                     <a-menu-item key="3" @click="showModal(record)">
@@ -54,11 +113,11 @@
                                             </a-dropdown>
                                         </a>
                                     </a-table>
-                                    <div class="d-flex justify-content-center">
+                                    <!-- <div class="d-flex justify-content-center">
                                         <a-spin :spinning="spinning" :visible="spinningVisible">
                                             <a-icon slot="indicator" type="loading" style="font-size: 24px" spin />
                                         </a-spin>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </a-tab-pane>
                             <a-tab-pane key="2">
@@ -67,6 +126,9 @@
                                     Create New Account
                                 </span>
                                 <div class="col-md-6">
+                                    <a-divider orientation="left" dashed="true">
+                                        Student Information
+                                    </a-divider>
                                     <form @submit.prevent="createUser">
                                         <div class="form-group">
                                             <label>Name</label>
@@ -112,11 +174,6 @@
                     <label>User Role</label>
                     <input v-model="form.type" type="text" name="text" class="form-control" value="1" disabled>
                 </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input v-model="form.password" type="text" name="password" class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
-                    <has-error :form="form" field="password"></has-error>
-                </div>
             </form>
         </a-modal>
     </div>
@@ -133,6 +190,7 @@ export default {
             searchInput: null,
             searchedColumn: '',
             users: [],
+            students: '',
             form: new Form({
                 id: '',
                 name: '',
@@ -141,6 +199,7 @@ export default {
                 type: '2',
                 role: 2
             }),
+            loading: false,
             visibleTable: true,
             title: 'Research List',
             modalVisible: false,
@@ -182,6 +241,10 @@ export default {
                     dataIndex: 'email',
                 },
                 {
+                    title: 'Group',
+                    dataIndex: 'group',
+                },
+                {
                     title: 'Status',
                     dataIndex: 'status',
                     width: 120,
@@ -191,12 +254,13 @@ export default {
                     filters: [
                         { text: 'Pending', value: 'Pending' },
                         { text: 'Approved', value: 'Approved' },
+                        { text: 'Disapproved', value: 'Disapproved' },
                     ],
                     filteredValue: filteredInfo.status || null,
                     onFilter: (value, record) => record.status.includes(value),
                     sorter: (a, b) => a.status.length - b.status.length,
                     sortOrder: sortedInfo.columnKey === 'status' && sortedInfo.order,
-                    ellipsis: true,
+
                 },
                 {
                     title: 'Date Created',
@@ -215,7 +279,8 @@ export default {
                 },
             ];
             return columns;
-        }
+        },
+
     },
     methods: {
         handleSearch(selectedKeys, confirm, dataIndex) {
@@ -232,7 +297,7 @@ export default {
             this.searchText = '';
         },
         handleChange(pagination, filters, sorter) {
-            console.log('Various parameters', pagination, filters, sorter);
+
             this.filteredInfo = filters;
             this.sortedInfo = sorter;
         },
@@ -247,36 +312,33 @@ export default {
         handleOk(e) {
             this.confirmLoading = true;
             this.form.put('/api/user/' + this.form.id).then(() => {
-
                 this.confirmLoading = false;
                 this.modalVisible = false;
                 this.confirmLoading = false;
                 this.loadUsers();
                 this.clear();
-
-                toast.fire({
-                    icon: 'success',
-                    title: 'User updated successfully.'
-                })
-
+                this.$message.success('User updated successfully', 2);
             }).catch(() => {
 
             });
         },
         handleCancel(e) {
-            console.log('Clicked cancel button');
             this.modalVisible = false;
             this.clear();
         },
         loadUsers() {
+            this.loading = true;
             axios.get('/api/students').then(({ data }) => {
                 this.users = data
+                this.loading = false;
                 this.spinning = false
                 this.spinningVisible = false
             });
         },
-        updateUser() {
-
+        countStudent() {
+            axios.get('/api/countStudent').then(({ data }) => {
+                this.students = data.users;
+            })
         },
         showDeleteConfirm(record) {
             this.$confirm({
@@ -286,13 +348,29 @@ export default {
                 okType: 'danger',
                 onOk() {
                     axios.delete('/api/user/' + record.id).then(() => {
-                        this.$message.success('User has been delete successfully', 2);
-                        this.loadUsers();
+                        this.$message.$success('User has been delete successfully', 2);
+                        this.$loadUsers();
                     })
                 },
                 onCancel() {
-                    console.log('Cancel');
+
                 },
+            });
+        },
+        disapproveStudent(id) {
+            axios.patch('/api/disapproveStudent/' + id).then(() => {
+                this.$message.success('User has been disapproved.', 2);
+                this.loadUsers();
+            }).catch(() => {
+                this.$message.success('Something was wrong. Try again.');
+            });
+        },
+        statusApprove(id) {
+            axios.patch('/api/approveStudent/' + id).then(() => {
+                this.$message.success('User has been approved.', 2);
+                this.loadUsers();
+            }).catch(() => {
+                this.$message.success('Something was wrong. Try again.');
             });
         },
         deleteUser(id) {
@@ -326,8 +404,6 @@ export default {
                     this.$message.error('Something wrong happened.', 2);
                 });
             }
-
-
             this.clear()
             this.loadUsers()
         },
@@ -345,9 +421,13 @@ export default {
             this.title = 'Research List';
         }
     },
-    created() {
-        this.loadUsers();
-    },
-}
+    mounted: function() {
+        this.$nextTick(function() {
+            this.loadUsers();
+            this.countStudent();
+            console.log('ASDA');
+        })
+    }
+};
 
 </script>

@@ -20,11 +20,21 @@ class DatabaseSeeder extends Seeder
         $faker = Faker::create('App\User');
          DB::table('users')->insert([
             'name' => 'Ian Jay Subang',
-            'email' => 'test@test.com',
+            'email' => 'admin@test.com',
             'type' => '1',
             'status' => 'Approved',
             'photo' => 'default.png',
             'expertises' => 'Data Mining, Web Programming, System Analysis and Design',
+            'password' => Hash::make('123456'),
+            'created_at' =>  Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+          DB::table('users')->insert([
+            'name' => 'Student Account',
+            'email' => 'student@test.com',
+            'type' => '2',
+            'status' => 'Approved',
+            'photo' => 'default.png',
             'password' => Hash::make('123456'),
             'created_at' =>  Carbon::now(),
             'updated_at' => Carbon::now()

@@ -1,5 +1,6 @@
 <template>
     <div class="page-content">
+        <a-back-top />
         <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
             <div>
                 <h4 class="mb-3 mb-md-0">Capstone 2</h4>
@@ -224,6 +225,7 @@ export default {
             formData.append('file', this.research.file);
             formData.append('fileName', this.research.fileName);
             formData.append('adviser', this.research.adviser);
+            
             axios.post('/api/archive', formData, config).then((res) => {
                 this.$message.success('Success', 2);
                 this.clear();

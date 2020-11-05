@@ -1,8 +1,9 @@
 <template>
     <div class="page-content">
+        <a-back-top />
         <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
             <div>
-                <h4 class="mb-3 mb-md-0">Schedule</h4>
+                <h4 class="mb-3 mb-md-0" style="color: #52616b">Schedule</h4>
             </div>
         </div>
         <div class="row">

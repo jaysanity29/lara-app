@@ -16,11 +16,14 @@ class CreateGroupsTable extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->increments('id');
             $table->string('group_name');
+            $table->string('group_title');
             $table->string('group_course');
             $table->string('acces_code');
-            $table->tinyInteger('members');
-            $table->string('defense_standing');
-            $table->string('group_percent');
+            $table->string('adviser')->default('no-adviser');
+            $table->tinyInteger('members')->default(1);
+            $table->tinyInteger('capstone')->default(1);
+            $table->string('defense_standing')->nullable();
+            $table->string('group_percent')->default('0');
             $table->timestamps();
         });
     }

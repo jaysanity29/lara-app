@@ -1,19 +1,22 @@
-require('./bootstrap');
 
-window.Vue = require('vue');
-
+//require('./bootstrap.js');
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+import { FormModel } from 'ant-design-vue';
 import { Form, HasError, AlertError } from 'vform';
 import VueRouter from 'vue-router';
-import routes from './router';
-import axios from 'axios';
+import AdminRoutes from './router/admin.js';
+import StudentRoutes from './router/student.js';
+import RPRoutes from './router/research-personnel.js';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 import VuePageTransition from 'vue-page-transition';
 import VueProgressBar from 'vue-progressbar';
 import NProgress from 'vue-nprogress';
-import NProgressContainer from 'vue-nprogress/src/NprogressContainer'
+import NProgressContainer from 'vue-nprogress/src/NprogressContainer';
+
+window.Vue = require('vue');
+window.axios = require('axios');
 window.form = Form
 window.swal = Swal
 
@@ -36,7 +39,7 @@ Vue.use(Antd)
 Vue.use(VuePageTransition)
 Vue.use(VueProgressBar, options)
 Vue.use(NProgress, options);
-
+Vue.use(FormModel);
 Vue.config.productionTip = true;
 
 const nprogress = new NProgress();
@@ -51,6 +54,10 @@ Vue.filter('capitalize', function(value) {
     value = value.toString()
     return value.charAt(0).toUpperCase() + value.slice(1)
 })
+var allRoutes = [];
+allRoutes = allRoutes.concat(AdminRoutes, StudentRoutes, RPRoutes);
+
+const routes = allRoutes;
 const router = new VueRouter({
     mode: 'history',
     routes,
@@ -76,10 +83,16 @@ Vue.component('side-bar', require('./components/SideBar').default);
 Vue.component('message-notification', require('./components/MessageNotification').default);
 Vue.component('notification', require('./components/Notification').default);
 Vue.component('account', require('./components/Account').default);
-Vue.component('student-sidebar', require('./views/Student/StudentSideBar.vue').default);
+Vue.component('student-navbar', require('./views/Student/StudentNavbar.vue').default);
 Vue.component('header', require('./components/Header.vue').default);
 Vue.component('avatar', require('./components/Avatar.vue').default);
 Vue.component('nprogress-container', NProgressContainer);
+Vue.component('pending-account', require('./components/PendingAccount.vue').default);
+Vue.component('route', require('./components/Route.vue').default);
+Vue.component('new-account', require('./components/NewAccount.vue').default);
+Vue.component('personnel-navbar', require('./views/ResearchPersonnel/Navbar.vue').default);
+Vue.component('flash', require('./components/Flash.vue').default);
+
 const app = new Vue({
     nprogress,
     el: '#app',

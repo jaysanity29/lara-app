@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     /**
@@ -23,6 +23,21 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return redirect()->guest('/admin/dashboard')->with('success', 'You are successfully logged in');
+        
+    }
+
+    public function approval()
+    {
+        return view('approval');
+    }
+
+    public function notfound()
+    {
+        return view('404');
+    }
+
+    public function newaccount()
+    {
+        return view('new-account');
     }
 }

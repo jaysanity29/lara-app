@@ -14,10 +14,24 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
+
     return $request->user();
 });
-Route::get('getPersonnels', 'API\UserController@getPersonnels');
-Route::post('storePersonnels', 'API\UserController@storePersonnels');
-Route::get('students', 'API\UserController@students');
-Route::apiResources(['user' => 'API\UserController']);
-Route::apiResources(['archive' => 'API\ArchiveController']);
+
+	Route::get('getPersonnels', 'API\UserController@getPersonnels');
+	Route::post('storePersonnels', 'API\UserController@storePersonnels');
+	Route::get('students', 'API\UserController@students');
+	Route::patch('approveStudent/{id}', 'API\UserController@approveStudent');
+	Route::patch('disapproveStudent/{id}', 'API\UserController@disapproveStudent');
+	Route::get('countStudent', 'API\UserController@countStudent');
+	Route::patch('updateRP/{id}', 'API\UserController@updateRP');
+	Route::apiResources([
+		'user' => 'API\UserController',
+		'archive' => 'API\ArchiveController',
+		'group' => 'API\GroupController',
+	]);
+
+
+
+
+

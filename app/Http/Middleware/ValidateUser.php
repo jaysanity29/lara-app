@@ -15,11 +15,13 @@ class ValidateUser
      */
     public function handle($request, Closure $next)
     {
-          if(auth()->check() && $request->user()->status != 'pending'){
-            return redirect()->guest('/account/conflictAccount');
+        $status = strtolower($request->user()->status);
+        if(auth()->check() && $status == 'pending'){
+            return redirect()->guest('/pending-account');
         }
-        else if(($request->user()->typ_id == 3 && $request->user()->grp_id == 1) || ($request->user()->typ_id == 3 && $request->user()->sec_id == null)){
-            return redirect()->guest('/student/group');
+        else if(auth()->check() && $request->user()->type == '2' && $request->user()->group == 'no-group' && $status != 'pending')
+        {
+            return redirect()->guest('/new-account')->withSuccess('Message');
         }
         else{
             return $next($request);

@@ -1,177 +1,144 @@
 <template>
-	<div class="page-content">
-		 <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
-          <div>
-            <h4 class="mb-3 mb-md-0">Research Archive</h4>
-          </div>
-        </div> 
+    <div class="page-content">
         <div class="row">
-					<div class="col-md-12 grid-margin stretch-card">
-						<div class="card">
-							<div class="card-body">
-								<h6 class="card-title">Bordered table</h6>
-								<p class="card-description">Add class <code>.table-bordered</code></p>
-								<div class="table-responsive pt-3">
-									<table class="table table-bordered">
-										<thead>
-											<tr>
-												<th>
-													#
-												</th>
-												<th>
-													Name
-												</th>
-												<th>
-													Progress
-												</th>
-												<th>
-													Salary
-												</th>
-												<th>
-													Start date
-												</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>
-													1
-												</td>
-												<td>
-													Cedric Kelly
-												</td>
-												<td>
-													<div class="progress">
-														<div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-													</div>
-												</td>
-												<td>
-													$206,850
-												</td>
-												<td>
-													June 21, 2010
-												</td>
-											</tr>
-											<tr>
-												<td>
-													2
-												</td>
-												<td>
-													Haley Kennedy
-												</td>
-												<td>
-													<div class="progress">
-														<div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-													</div>
-												</td>
-												<td>
-													$313,500
-												</td>
-												<td>
-													May 15, 2013
-												</td>
-											</tr>
-											<tr>
-												<td>
-													3
-												</td>
-												<td>
-													Bradley Greer
-												</td>
-												<td>
-													<div class="progress">
-														<div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-													</div>
-												</td>
-												<td>
-													$132,000
-												</td>
-												<td>
-													Apr 12, 2014
-												</td>
-											</tr>
-											<tr>
-												<td>
-													4
-												</td>
-												<td>
-													Brenden Wagner
-												</td>
-												<td>
-													<div class="progress">
-														<div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-													</div>
-												</td>
-												<td>
-													$206,850
-												</td>
-												<td>
-													June 21, 2010
-												</td>
-											</tr>
-											<tr>
-												<td>
-													5
-												</td>
-												<td>
-													Bruno Nash
-												</td>
-												<td>
-													<div class="progress">
-														<div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-													</div>
-												</td>
-												<td>
-													$163,500
-												</td>
-												<td>
-													January 01, 2016
-												</td>
-											</tr>
-											<tr>
-												<td>
-													6
-												</td>
-												<td>
-													Sonya Frost
-												</td>
-												<td>
-													<div class="progress">
-														<div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-													</div>
-												</td>
-												<td>
-													$103,600
-												</td>
-												<td>
-													July 18, 2011
-												</td>
-											</tr>
-											<tr>
-												<td>
-													7
-												</td>
-												<td>
-													Zenaida Frank
-												</td>
-												<td>
-													<div class="progress">
-														<div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-													</div>
-												</td>
-												<td>
-													$313,500
-												</td>
-												<td>
-													March 22, 2013
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>     
-	</div>
+            <div class="col-md-12 grid-margin">
+                <a-input-search style="width: 300px" placeholder="Search title..." enter-button @search="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <a-list item-layout="vertical" :pagination="{ pageSize: 10}" :data-source="researches" bordered>
+                    <div slot="header">
+                        List of Researches
+                    </div>
+                    <a-list-item slot="renderItem" slot-scope="item, index">
+                        <a slot="actions" @click="viewInfo(item)">More Info</a>
+                        <a slot="actions" @click="viewPDF(item)">View</a>
+                        <a-list-item-meta :description="item.title">
+                            <a-tag slot="title" color="#f50"> {{ item.year }}</a-tag>
+                        </a-list-item-meta>
+                    </a-list-item>
+                </a-list>
+                <a-drawer :placement="'right'" width="60%" :after-visible-change="afterVisibleChange" :visible="visible" :closable="true" @close="onClose">
+                            <div>
+                                <pdf v-for="i in numPages" :key="i" :src="pdfFile" :page="i" @num-pages="pageCount = $event" @page-loaded="currentPage = $event"></pdf>
+                            </div>
+                        </a-drawer>
+            </div>
+        </div>
+    </div>
 </template>
+<script>
+import pdf from 'vue-pdf';
+export default {
+    name: 'Header',
+    components: {
+        pdf
+    },
+    data() {
+        return {
+            researches: [],
+            visible: false,
+            visibleInfo: false,
+            currentPage: 0,
+            pageCount: 0,
+            numPages: undefined,
+            pdfFile: '',
+            researchInfo: {},
+            filteredInfo: null,
+            sortedInfo: null,
+        }
+    },
+    beforeMount() {
+        this.showAllResearches();
+    },
+    methods: {
+
+         afterVisibleChange(val) {
+
+        },
+        showAllResearches() {
+            axios.get('/api/archive').then(({ data }) => {
+                this.researches = data.data;
+                this.spinning = false
+                this.spinningVisible = false
+            });
+        },
+        viewInfo(item) {
+            this.visibleInfo = true;
+            this.researchInfo = item;
+            
+        },
+        onCloseView() {
+            this.visibleInfo = false;
+
+        },
+        async viewPDF(record) {
+            let loadingTask = pdf.createLoadingTask('/file/research-archive/' + record.file_name);
+            this.pdfFile = loadingTask;
+
+            await this.pdfFile.promise.then(pdf => {
+                this.numPages = pdf.numPages;
+
+            })
+            this.visible = true;
+        },
+        onClose() {
+            this.visible = false;
+            this.pdfFile = '';
+        },
+        handleChange(e) {
+            console.log('Val', e);
+        },
+        afterVisibleChange(val) {
+
+        },
+    },
+    computed: {
+        columns() {
+            let { sortedInfo, filteredInfo } = this;
+            sortedInfo = sortedInfo || {};
+            filteredInfo = filteredInfo || {};
+            const columns = [{
+
+                    title: 'Research Title',
+                    dataIndex: 'title',
+                    key: 'title',
+
+
+                    ellipsis: true,
+                },
+                {
+                    title: 'Author(s)',
+                    dataIndex: 'author',
+                    key: 'author',
+                },
+                {
+                    title: 'Adviser',
+                    dataIndex: 'adviser',
+                    key: 'adviser',
+                },
+                {
+                    title: 'Year Published',
+                    dataIndex: 'year',
+                    key: 'year',
+                    scopedSlots: {
+                        customRender: 'year',
+                    },
+                    sorter: (a, b) => a.year - b.year,
+                    sortOrder: sortedInfo.columnKey === 'year' && sortedInfo.order,
+                },
+                {
+                    title: 'Action',
+                    key: 'action',
+                    scopedSlots: {
+                        customRender: 'action',
+                    },
+                },
+            ];
+            return columns;
+        }
+    },
+};
+
+</script>
